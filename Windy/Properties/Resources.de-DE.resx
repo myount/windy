@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutBox_Blurb" xml:space="preserve">
+    <value>Ein leichter Fenstermanager, der das Leben für Benutzer andockbaren mobilen PCs vereinfacht.</value>
+  </data>
+  <data name="MenuItem_AboutWindy" xml:space="preserve">
+    <value>&amp;Über Windy...</value>
+    <comment>Menu item; &amp; should precede shortcut key</comment>
+  </data>
+  <data name="MenuItem_Exit" xml:space="preserve">
+    <value>&amp;Ende</value>
+    <comment>Menu item; &amp; should precede shortcut key</comment>
+  </data>
+  <data name="MenuItem_RestoreWindowLayout" xml:space="preserve">
+    <value>Fensterbelegung wiederhe&amp;rzustellen</value>
+    <comment>Menu item; &amp; should precede shortcut key</comment>
+  </data>
+  <data name="MenuItem_SaveWindowLayout" xml:space="preserve">
+    <value>Fensterbelegung &amp;speichern</value>
+    <comment>Menu item; &amp; should precede shortcut key</comment>
+  </data>
+  <data name="MessageBoxText_RestoringToNonMatchingScreenLayout" xml:space="preserve">
+    <value>Sie haben darum gebeten, die Fensterbelegung wiederherzustellen, aber die aktuelle Bildschirmeinstellungen passen an die mit der Fensterbelegung gespeicherten Einstellungen. Möchten Sie sowieso die Fensterbelegung rückstellen? </value>
+  </data>
+  <data name="MessageBoxText_WindyFailedToStart" xml:space="preserve">
+    <value>Windy könnte nicht starten</value>
+  </data>
+  <data name="MessageBoxText_WindyFailedToStart_ShortcutsInUse" xml:space="preserve">
+    <value>Windy könnte nicht starten, weil sein Speichern- und Wiederherstellen-Hotkeys werden schon von einer anderen Anwendung benutzt.</value>
+  </data>
+  <data name="MessageBoxTitle_RestoringToNonMatchingScreenLayout" xml:space="preserve">
+    <value>Fensterbelegung eigentlich rückstellen?</value>
+  </data>
+  <data name="TipText_CouldntRestoreWindows" xml:space="preserve">
+    <value>Ein Fehler ist dabei aufgetreten, wenn wir die Fensterbelegung wiederherzustellen versuchten: {0} ({1})</value>
+    <comment>{0} and {1} are the exception message and type</comment>
+  </data>
+  <data name="TipText_CouldntSaveWindows" xml:space="preserve">
+    <value>Ein Fehler ist dabei aufgetreten, wenn wir die Fensterbelegung zu speichern versuchten: {0} ({1})</value>
+    <comment>{0} and {1} are the exception message and type</comment>
+  </data>
+  <data name="TipText_WindowLayoutRestored" xml:space="preserve">
+    <value>Die gespeicherte Fensterbelegung ist wiederhergestellt worden.</value>
+  </data>
+  <data name="TipText_WindowLayoutSaved" xml:space="preserve">
+    <value>Ihre aktuelle Fensterbelegung ist gespeichert worden.</value>
+  </data>
+  <data name="TipText_WindowsAutomaticallyRestored" xml:space="preserve">
+    <value>Windy hat Ihre Fensterbelegung automatisch wieder hergestellt, denn die Bildschirmeinstellungen sind wieder dieselben, als wenn Sie die Fensterbelegung speicherten.</value>
+  </data>
+  <data name="TipText_WindowsNotAutomaticallyRestored" xml:space="preserve">
+    <value>Windy hat versucht, Ihre Fensterbelegung automatisch wiederherzustellen, wenn die Bildschirmeinstellungen geändert worden war, aber ein Fehler ist aufgetreten: {0} ({1})</value>
+    <comment>{0} and {1} are the exception message and type</comment>
+  </data>
+  <data name="TipText_WindyInstructions" xml:space="preserve">
+    <value>Drücken Sie Strg+Win+S, um die Fensterbelegung zu speichern. Windy stellt sie wieder her, wenn es wieder dieselben Bildschirmeinstellungen sieht, oder manuell wenn Sie Strg+Win+R drücken.</value>
+  </data>
+  <data name="TipTitle_CouldntRestoreWindows" xml:space="preserve">
+    <value>Windy könnte Ihre Fensterbelegung nicht wiederherstellen</value>
+  </data>
+  <data name="TipTitle_CouldntSaveWindows" xml:space="preserve">
+    <value>Windy könnte Ihre Fensterbelegung nicht speichern</value>
+  </data>
+  <data name="TipTitle_WindowLayoutRestored" xml:space="preserve">
+    <value>Fensterbelegung wiederhergestellt</value>
+  </data>
+  <data name="TipTitle_WindowLayoutSaved" xml:space="preserve">
+    <value>Fensterbelegung gespeichert</value>
+  </data>
+  <data name="TipTitle_WindowsAutomaticallyRestored" xml:space="preserve">
+    <value>Fensterbelegung automatisch wiederhergestellt</value>
+  </data>
+  <data name="TipTitle_WindyIsRunning" xml:space="preserve">
+    <value>Windy ist gestartet</value>
+  </data>
+</root>
