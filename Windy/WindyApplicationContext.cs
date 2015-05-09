@@ -53,18 +53,20 @@ namespace Windy
                     // show only on a deliberate left click and not when they mash the mouse buttons or something
                     if (args.Button == MouseButtons.Left)
                     {
-                        _trayIcon.ShowBalloonTip(10000,
-                                                 GetString("TipTitle_WindyIsRunning"),
-                                                 GetString("TipText_WindyInstructions"),
-                                                 ToolTipIcon.Info);
+                        ShowWindyIsRunningTip();
                     }
                 };
 
             WindySerializationHelpers.SaveDesktopState();
+            ShowWindyIsRunningTip();
+        }
+
+        private void ShowWindyIsRunningTip()
+        {
             _trayIcon.ShowBalloonTip(10000,
-                                     GetString("TipTitle_WindyIsRunning"),
-                                     GetString("TipText_WindyInstructions"),
-                                     ToolTipIcon.Info);
+                         GetString("TipTitle_WindyIsRunning"),
+                         GetString("TipText_WindyInstructions"),
+                         ToolTipIcon.Info);
         }
 
         void SystemEvents_DisplaySettingsChanging(object sender, EventArgs e)
@@ -126,7 +128,7 @@ namespace Windy
 
             _trayIcon = new NotifyIcon();
             _trayIcon.Text = "Windy";
-            _trayIcon.Icon = Properties.Resources.windy;
+            _trayIcon.Icon = Resources.windy;
 
             _trayIcon.ContextMenuStrip = new ContextMenuStrip();
             _trayIcon.ContextMenuStrip.Items.AddRange(
