@@ -198,8 +198,9 @@ namespace Windy
             // the Screen class doesn't seem to invalidate its own internal display state array correctly, so let's just
             // invalidate it using reflection whenever we need to ask about the current display configuration. yes, this
             // is terrible, but the alternative is reimplementing what the Screen class does myself, which would require
-            // grinding out a bunch of P/Invoke wrappers), I'll do the terrible thing instead.  we'll at least be a tiny
-            // bit reasonable and hedge against the possibility of that implementation detail changing in the future.
+            // grinding out a bunch of P/Invoke wrappers, so I'll gladly do the terrible thing instead. I'll at least be
+            // a tiny bit reasonable and hedge against the possibility of that implementation detail changing in the
+            // future.
             var screenScreens = typeof(Screen).GetField("screens", BindingFlags.Static | BindingFlags.NonPublic);
             if (screenScreens != null)
             {
