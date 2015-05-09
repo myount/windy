@@ -54,6 +54,7 @@ namespace Windy
         public int DialogId { get { return _sysWin.DialogID; }}
         public bool Resizable { get { return _sysWin.Resizable; } }
         public bool Visible { get { return _sysWin.Visible; } }
+        public bool IsValid { get { return _sysWin != null && _sysWin.IsValid(); } }
 
         public Window(SystemWindow sysWin)
         {
@@ -76,7 +77,15 @@ namespace Windy
                       bool Visible)
         {
             _sysWin = new SystemWindow(HWnd);
+
+            // don't mess with an invalid window
             if (!_sysWin.IsValid())
+            {
+                return;
+            }
+
+            // if it's valid but the ClassNames don't match, it's probably not the same window
+            if (ClassName != _sysWin.ClassName)
             {
                 return;
             }
