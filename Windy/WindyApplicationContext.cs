@@ -48,10 +48,17 @@ namespace Windy
             SystemEvents.DisplaySettingsChanging += SystemEvents_DisplaySettingsChanging;
 
             _trayIcon.Visible = true;
-            _trayIcon.Click += (sender, args) => _trayIcon.ShowBalloonTip(10000,
-                                                                          GetString("TipTitle_WindyIsRunning"),
-                                                                          GetString("TipText_WindyInstructions"),
-                                                                          ToolTipIcon.Info);
+            _trayIcon.MouseClick += (sender, args) =>
+                {
+                    // show only on a deliberate left click and not when they mash the mouse buttons or something
+                    if (args.Button == MouseButtons.Left)
+                    {
+                        _trayIcon.ShowBalloonTip(10000,
+                                                 GetString("TipTitle_WindyIsRunning"),
+                                                 GetString("TipText_WindyInstructions"),
+                                                 ToolTipIcon.Info);
+                    }
+                };
 
             WindySerializationHelpers.SaveDesktopState();
             _trayIcon.ShowBalloonTip(10000,
