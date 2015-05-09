@@ -81,7 +81,7 @@ namespace Windy
             Utilities.WriteFile(Utilities.GenerateTempFileName("WindowState"), JsonConvert.SerializeObject(GetAllWindows()));
         }
 
-        public static void RestoreWindows()
+        public static bool RestoreWindows()
         {
             var files = Directory.EnumerateFiles(Path.GetTempPath(), "Windy_WindowState_*.json");
 
@@ -94,15 +94,28 @@ namespace Windy
 
             using (var sr = new StreamReader(File.Open(file, FileMode.Open, FileAccess.Read, FileShare.None)))
             {
-                // because Window just wraps SystemWindow (because certain properties of SystemWindow cause
-                // infinite loops when JSON.NET tries to serialize them (and I didn't want to make a custom
-                // build of ManagedWinapi solely to add [JsonIgnore] attributes, or try to inject them with
-                // reflection (is that even possible?))), and because the [JsonConstructor] constructor for
-                // Window initializes its private SystemWindow instance using the serialized HWnd value and
-                // then sets properties on it, simply deserializing the list of Window objects will restore
-                // the window layout, so we don't actually need to assign the result of this.
-                JsonConvert.DeserializeObject<IEnumerable<Window>>(sr.ReadToEnd());
+                try
+                {
+                    // because the [JsonConstructor] constructor for Window initializes its private SystemWindow
+                    // instance using the serialized HWnd value, makes sure the window handle is valid, and then
+                    // sets properties if it is, the mere act of deserializing the window state restores all the
+                    // positions and properties, so in fact, we don't need to assign this to anything...
+                    var wins = JsonConvert.DeserializeObject<IEnumerable<Window>>(sr.ReadToEnd());
+
+                    // ... but we should delete window state if all the windows are invalid.
+                    if (wins.All(win => !win.IsValid))
+                    {
+                        DeleteStaleWindowState();
+                        return false;
+                    }
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
             }
+
+            return true;
         }
 
         private static void DeleteStaleWindowState()
