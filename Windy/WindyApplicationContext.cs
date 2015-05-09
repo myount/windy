@@ -69,7 +69,7 @@ namespace Windy
                          ToolTipIcon.Info);
         }
 
-        void SystemEvents_DisplaySettingsChanging(object sender, EventArgs e)
+        private void SystemEvents_DisplaySettingsChanging(object sender, EventArgs e)
         {
             var ds = WindySerializationHelpers.LoadDesktopState();
             if (CurrentDesktopLayoutMatches(ds))
@@ -94,7 +94,7 @@ namespace Windy
             }
         }
 
-        void Application_ApplicationExit(object sender, EventArgs e)
+        private void Application_ApplicationExit(object sender, EventArgs e)
         {
             SystemEvents.DisplaySettingsChanging -= SystemEvents_DisplaySettingsChanging;
             _trayIcon.Visible = false;
