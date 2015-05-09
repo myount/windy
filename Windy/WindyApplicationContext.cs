@@ -159,8 +159,8 @@ namespace Windy
             {
                 var res =
                     MessageBox.Show(
-                        GetString("MessageBoxTitle_RestoringToNonMatchingScreenLayout"),
                         GetString("MessageBoxText_RestoringToNonMatchingScreenLayout"),
+                        GetString("MessageBoxTitle_RestoringToNonMatchingScreenLayout"),
                         MessageBoxButtons.YesNo,
                         MessageBoxIcon.Warning);
 
