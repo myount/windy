@@ -102,6 +102,8 @@ namespace Windy
 
         private void Initialize()
         {
+            WindySerializationHelpers.CleanUpStaleState();
+
             // set up the hotkey handlers first, so we can fail fast if they're already taken.
             try
             {

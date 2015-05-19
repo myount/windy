@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -123,6 +124,18 @@ namespace Windy
             foreach (var f in Directory.EnumerateFiles(Path.GetTempPath(), "Windy_WindowState_*.json"))
             {
                 File.Delete(f);
+            }
+        }
+
+        public static void CleanUpStaleState()
+        {
+            var bootTime = DateTime.Now - TimeSpan.FromSeconds((double)Stopwatch.GetTimestamp() / Stopwatch.Frequency);
+            foreach (var file in Directory.EnumerateFiles(Path.GetTempPath(), "Windy_*.json")
+                                          .Select(file => new { file, fileInfo = new FileInfo(file) })
+                                          .Where(f => f.fileInfo.CreationTime < bootTime)
+                                          .Select(f => f.file))
+            {
+                File.Delete(file);
             }
         }
     }
