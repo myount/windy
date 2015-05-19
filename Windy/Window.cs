@@ -54,7 +54,9 @@ namespace Windy
         public int DialogId { get { return _sysWin.DialogID; }}
         public bool Resizable { get { return _sysWin.Resizable; } }
         public bool Visible { get { return _sysWin.Visible; } }
-        public bool IsValid { get { return _sysWin != null && _sysWin.IsValid(); } }
+
+        [JsonIgnore]
+        public bool IsValid { get; private set; }
 
         public Window(SystemWindow sysWin)
         {
@@ -77,17 +79,29 @@ namespace Windy
                       bool Visible)
         {
             _sysWin = new SystemWindow(HWnd);
+            IsValid = false; // until proven otherwise
 
-            // don't mess with an invalid window
-            if (!_sysWin.IsValid())
+            // SystemWindow.IsValid only checks that the HWnd != IntPtr.Zero, so we perform our own checks
+            try
             {
-                return;
+                // if the ClassNames don't match, it's probably not the same window
+                if (ClassName != _sysWin.ClassName)
+                {
+                    return;
+                }
+
+                IsValid = true;
             }
-
-            // if it's valid but the ClassNames don't match, it's probably not the same window
-            if (ClassName != _sysWin.ClassName)
+            catch (System.ComponentModel.Win32Exception ex)
             {
-                return;
+                // this might not really be an error...
+                if (ex.HResult == 0)
+                {
+                    IsValid = true;
+                }
+                // ... but usually it is.  attempting to access an invalid window throws a Win32Exception
+                // whose NativeErrorCode is 0 ("operation completed successfully") but whose HResult is not
+                // S_OK = 0x0 (it's usually E_FAIL, "Unspecified failure", 0x80004005).
             }
 
             // minimized and maximized windows won't be moved and resized, so normal-ify them first
