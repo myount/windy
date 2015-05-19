@@ -160,6 +160,15 @@ namespace Windy.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The saved window layout has been restored..
+        /// </summary>
+        internal static string TipText_WindowLayoutRestored {
+            get {
+                return ResourceManager.GetString("TipText_WindowLayoutRestored", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your current window layout has been saved..
         /// </summary>
         internal static string TipText_WindowLayoutSaved {
@@ -210,6 +219,15 @@ namespace Windy.Properties {
         internal static string TipTitle_CouldntSaveWindows {
             get {
                 return ResourceManager.GetString("TipTitle_CouldntSaveWindows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Window layout restored.
+        /// </summary>
+        internal static string TipTitle_WindowLayoutRestored {
+            get {
+                return ResourceManager.GetString("TipTitle_WindowLayoutRestored", resourceCulture);
             }
         }
         

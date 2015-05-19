@@ -156,6 +156,9 @@
     <value>An error occurred while trying to save your window layout: {0} ({1})</value>
     <comment>{0} and {1} are the exception message and type</comment>
   </data>
+  <data name="TipText_WindowLayoutRestored" xml:space="preserve">
+    <value>The saved window layout has been restored.</value>
+  </data>
   <data name="TipText_WindowLayoutSaved" xml:space="preserve">
     <value>Your current window layout has been saved.</value>
   </data>
@@ -174,6 +177,9 @@
   </data>
   <data name="TipTitle_CouldntSaveWindows" xml:space="preserve">
     <value>Windy couldn't save your windows</value>
+  </data>
+  <data name="TipTitle_WindowLayoutRestored" xml:space="preserve">
+    <value>Window layout restored</value>
   </data>
   <data name="TipTitle_WindowLayoutSaved" xml:space="preserve">
     <value>Window layout saved</value>
