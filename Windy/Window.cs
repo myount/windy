@@ -44,39 +44,41 @@ namespace Windy
         private readonly SystemWindow _sysWin;
 
         public IntPtr HWnd { get { return _sysWin.HWnd; } }
-        public string Title { get { return _sysWin.Title; } }
-        public Point Location { get { return _sysWin.Location; } set { _sysWin.Location = value; } }
-        public Size Size { get { return _sysWin.Size; } set { _sysWin.Size = value; } }
-        public WindowStyleFlags Style { get { return _sysWin.Style; } set { _sysWin.Style = value; } }
-        public WindowExStyleFlags ExStyle { get { return _sysWin.ExtendedStyle; } set { _sysWin.ExtendedStyle = value; } }
-        public FormWindowState State { get { return _sysWin.WindowState; } set { _sysWin.WindowState = value; } }
-        public string ClassName { get { return _sysWin.ClassName; } }
-        public int DialogId { get { return _sysWin.DialogID; }}
-        public bool Resizable { get { return _sysWin.Resizable; } }
-        public bool Visible { get { return _sysWin.Visible; } }
-
-        [JsonIgnore]
-        public bool IsValid { get; private set; }
+        [JsonIgnore] public string Title { get { return _sysWin.Title; } }
+        public Point Location { get; private set; }
+        public Size Size { get; private set; }
+        public WindowStyleFlags Style { get; private set; }
+        public WindowExStyleFlags ExStyle { get; private set; }
+        public FormWindowState State { get; private set; }
+        public string ClassName { get; private set; }
+        [JsonIgnore] public bool IsValid { get; private set; }
 
         public Window(SystemWindow sysWin)
         {
+            if (sysWin == null)
+            {
+                throw new ArgumentException("Constructor requires a non-null SystemWindow instance.", "sysWin");
+            }
+
             _sysWin = sysWin;
+            this.Location = _sysWin.Location;
+            this.Size = _sysWin.Size;
+            this.Style = _sysWin.Style;
+            this.ExStyle = _sysWin.ExtendedStyle;
+            this.State = _sysWin.WindowState;
+            this.ClassName = _sysWin.ClassName;
         }
 
         private Window() { }
 
         [JsonConstructor]
         public Window(IntPtr HWnd,
-                      string Title,
                       Point Location,
                       Size Size,
                       WindowStyleFlags Style,
                       WindowExStyleFlags ExStyle,
                       FormWindowState State,
-                      string ClassName,
-                      int DialogId,
-                      bool Resizable,
-                      bool Visible)
+                      string ClassName)
         {
             _sysWin = new SystemWindow(HWnd);
             IsValid = false; // until proven otherwise
@@ -85,12 +87,8 @@ namespace Windy
             try
             {
                 // if the ClassNames don't match, it's probably not the same window
-                if (ClassName != _sysWin.ClassName)
-                {
-                    return;
-                }
-
-                IsValid = true;
+                IsValid = (ClassName == _sysWin.ClassName);
+                if (!IsValid) return;
             }
             catch (System.ComponentModel.Win32Exception ex)
             {
@@ -99,11 +97,20 @@ namespace Windy
                 {
                     IsValid = true;
                 }
-                // ... but usually it is.  attempting to access an invalid window throws a Win32Exception
-                // whose NativeErrorCode is 0 ("operation completed successfully") but whose HResult is not
-                // S_OK = 0x0 (it's usually E_FAIL, "Unspecified failure", 0x80004005).
+                // ... but usually it is.  attempting to access an invalid window throws a Win32Exception whose
+                // NativeErrorCode is 0x0 ("operation completed successfully"), but whose HResult is not S_OK =
+                // 0x0 (it's usually E_FAIL, "Unspecified failure", 0x80004005).
             }
 
+            this.Location = Location;
+            this.Size = Size;
+            this.Style = Style;
+            this.ExStyle = ExStyle;
+            this.State = State;
+        }
+
+        public void Restore()
+        {
             // minimized and maximized windows won't be moved and resized, so normal-ify them first
             _sysWin.WindowState = FormWindowState.Normal;
 

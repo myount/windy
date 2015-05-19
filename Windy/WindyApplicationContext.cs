@@ -61,45 +61,6 @@ namespace Windy
             ShowWindyIsRunningTip();
         }
 
-        private void ShowWindyIsRunningTip()
-        {
-            _trayIcon.ShowBalloonTip(10000,
-                         GetString("TipTitle_WindyIsRunning"),
-                         GetString("TipText_WindyInstructions"),
-                         ToolTipIcon.Info);
-        }
-
-        private void SystemEvents_DisplaySettingsChanging(object sender, EventArgs e)
-        {
-            var ds = WindySerializationHelpers.LoadDesktopState();
-            if (CurrentDesktopLayoutMatches(ds))
-            {
-                try
-                {
-                    WindySerializationHelpers.RestoreWindows();
-                    _trayIcon.ShowBalloonTip(5000,
-                                             GetString("TipTitle_WindowsAutomaticallyRestored"),
-                                             GetString("TipText_WindowsAutomaticallyRestored"),
-                                             ToolTipIcon.Info);
-                }
-                catch (Exception ex)
-                {
-                    _trayIcon.ShowBalloonTip(10000,
-                                             GetString("TipTitle_CouldntRestoreWindows"),
-                                             string.Format(GetString("TipText_WindowsNotAutomaticallyRestored"),
-                                                 ex.Message,
-                                                 ex.GetType()),
-                                             ToolTipIcon.Error);
-                }
-            }
-        }
-
-        private void Application_ApplicationExit(object sender, EventArgs e)
-        {
-            SystemEvents.DisplaySettingsChanging -= SystemEvents_DisplaySettingsChanging;
-            _trayIcon.Visible = false;
-        }
-
         private void Initialize()
         {
             WindySerializationHelpers.CleanUpStaleState();
@@ -146,6 +107,31 @@ namespace Windy
                 });
         }
 
+        private void ShowWindyIsRunningTip()
+        {
+            _trayIcon.ShowBalloonTip(10000,
+                         GetString("TipTitle_WindyIsRunning"),
+                         GetString("TipText_WindyInstructions"),
+                         ToolTipIcon.Info);
+        }
+
+        private void SystemEvents_DisplaySettingsChanging(object sender, EventArgs e)
+        {
+            var ds = WindySerializationHelpers.LoadDesktopState();
+
+            if (CurrentDesktopLayoutMatches(ds))
+            {
+                RestoreWindows();
+            }
+        }
+
+        private void Application_ApplicationExit(object sender, EventArgs e)
+        {
+            SystemEvents.DisplaySettingsChanging -= SystemEvents_DisplaySettingsChanging;
+            _trayIcon.Visible = false;
+        }
+
+
         private void SaveHotkeyOnHotkeyPressed(object sender, EventArgs eventArgs)
         {
             try
@@ -166,6 +152,7 @@ namespace Windy
         private void RestoreHotkeyOnHotkeyPressed(object sender, EventArgs eventArgs)
         {
             var loaded = WindySerializationHelpers.LoadDesktopState();
+
             if (!CurrentDesktopLayoutMatches(loaded))
             {
                 var res =
@@ -181,16 +168,35 @@ namespace Windy
                 }
             }
 
+            RestoreWindows();
+        }
+
+        private void RestoreWindows()
+        {
             try
             {
-                WindySerializationHelpers.RestoreWindows();
-                _trayIcon.ShowBalloonTip(5000, GetString("TipTitle_WindowLayoutRestored"), GetString("TipText_WindowLayoutRestored"), ToolTipIcon.Info);
+                if (WindySerializationHelpers.RestoreWindows())
+                {
+                    _trayIcon.ShowBalloonTip(5000,
+                                             GetString("TipTitle_WindowsAutomaticallyRestored"),
+                                             GetString("TipText_WindowsAutomaticallyRestored"),
+                                             ToolTipIcon.Info);
+                }
+                else
+                {
+                    _trayIcon.ShowBalloonTip(5000,
+                                             GetString("TipTitle_NoWindowsToRestore"),
+                                             GetString("TipText_NoWindowsToRestore"),
+                                             ToolTipIcon.Info);
+                }
             }
             catch (Exception ex)
             {
                 _trayIcon.ShowBalloonTip(10000,
                                          GetString("TipTitle_CouldntRestoreWindows"),
-                                         string.Format(GetString("TipText_CouldntRestoreWindows"), ex.Message, ex.GetType()),
+                                         string.Format(GetString("TipText_WindowsNotAutomaticallyRestored"),
+                                                       ex.Message,
+                                                       ex.GetType()),
                                          ToolTipIcon.Error);
             }
         }

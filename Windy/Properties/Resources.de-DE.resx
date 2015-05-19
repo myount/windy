@@ -156,6 +156,9 @@
     <value>Ein Fehler ist dabei aufgetreten, wenn wir die Fensterbelegung zu speichern versuchten: {0} ({1})</value>
     <comment>{0} and {1} are the exception message and type</comment>
   </data>
+  <data name="TipText_NoWindowsToRestore" xml:space="preserve">
+    <value>Windy hat versucht, Ihre Fensterbelegung wiederherzustellen, aber keiner der derzeit offenen Fenster passen die gespeicherten Fenster zusammen.</value>
+  </data>
   <data name="TipText_WindowLayoutRestored" xml:space="preserve">
     <value>Die gespeicherte Fensterbelegung ist wiederhergestellt worden.</value>
   </data>
@@ -177,6 +180,9 @@
   </data>
   <data name="TipTitle_CouldntSaveWindows" xml:space="preserve">
     <value>Windy könnte Ihre Fensterbelegung nicht speichern</value>
+  </data>
+  <data name="TipTitle_NoWindowsToRestore" xml:space="preserve">
+    <value>Keine Fenster wiederhergestellt</value>
   </data>
   <data name="TipTitle_WindowLayoutRestored" xml:space="preserve">
     <value>Fensterbelegung wiederhergestellt</value>

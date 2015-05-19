@@ -57,7 +57,7 @@ namespace Windy
 
             if (!files.Any())
             {
-                throw new InvalidOperationException("No serialized desktop state data was found.");
+                throw new InvalidOperationException("No saved display configuration data was found.");
             }
 
             string file = files.First();
@@ -88,35 +88,26 @@ namespace Windy
 
             if (!files.Any())
             {
-                throw new InvalidOperationException("No serialized window data was found.");
+                throw new InvalidOperationException("No saved window layout was found.");
             }
-            
+
             string file = files.First();
 
             using (var sr = new StreamReader(File.Open(file, FileMode.Open, FileAccess.Read, FileShare.None)))
             {
-                try
+                var wins = JsonConvert.DeserializeObject<IEnumerable<Window>>(sr.ReadToEnd());
+                if (wins.All(win => !win.IsValid))
                 {
-                    // because the [JsonConstructor] constructor for Window initializes its private SystemWindow
-                    // instance using the serialized HWnd value, makes sure the window handle is valid, and then
-                    // sets properties if it is, the mere act of deserializing the window state restores all the
-                    // positions and properties, so in fact, we don't need to assign this to anything...
-                    var wins = JsonConvert.DeserializeObject<IEnumerable<Window>>(sr.ReadToEnd());
-
-                    // ... but we should delete window state if all the windows are invalid.
-                    if (wins.All(win => !win.IsValid))
-                    {
-                        DeleteStaleWindowState();
-                        return false;
-                    }
-                }
-                catch (Exception)
-                {
+                    DeleteStaleWindowState();
                     return false;
                 }
-            }
 
-            return true;
+                foreach (var win in wins.Where(win => win.IsValid))
+                {
+                    win.Restore();
+                }
+                return true;
+            }
         }
 
         private static void DeleteStaleWindowState()
