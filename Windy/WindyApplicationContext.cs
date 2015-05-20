@@ -19,12 +19,14 @@
 */
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
 using ManagedWinapi;
-
+using ManagedWinapi.Windows;
 using Microsoft.Win32;
 
 using Windy.Properties;
@@ -39,6 +41,8 @@ namespace Windy
 
         private readonly Hotkey _restoreHotkey = new Hotkey();
 
+        private ToolStripMenuItem _savedWindows = new ToolStripMenuItem(GetString("MenuItem_CurrentlySavedWindows"));
+
         public WindyApplicationContext()
         {
             Initialize();
@@ -48,51 +52,23 @@ namespace Windy
             SystemEvents.DisplaySettingsChanging += SystemEvents_DisplaySettingsChanging;
 
             _trayIcon.Visible = true;
-            _trayIcon.Click += (sender, args) => _trayIcon.ShowBalloonTip(10000,
-                                                                          GetString("TipTitle_WindyIsRunning"),
-                                                                          GetString("TipText_WindyInstructions"),
-                                                                          ToolTipIcon.Info);
-
+            _trayIcon.MouseClick += (sender, args) =>
+                {
+                    // show only on a deliberate left click and not when they mash the mouse buttons or something
+                    if (args.Button == MouseButtons.Left)
+                    {
+                        ShowWindyIsRunningTip();
+                    }
+                };
+            
             WindySerializationHelpers.SaveDesktopState();
-            _trayIcon.ShowBalloonTip(10000,
-                                     GetString("TipTitle_WindyIsRunning"),
-                                     GetString("TipText_WindyInstructions"),
-                                     ToolTipIcon.Info);
-        }
-
-        void SystemEvents_DisplaySettingsChanging(object sender, EventArgs e)
-        {
-            var ds = WindySerializationHelpers.LoadDesktopState();
-            if (CurrentDesktopLayoutMatches(ds))
-            {
-                try
-                {
-                    WindySerializationHelpers.RestoreWindows();
-                    _trayIcon.ShowBalloonTip(5000,
-                                             GetString("TipTitle_WindowsAutomaticallyRestored"),
-                                             GetString("TipText_WindowsAutomaticallyRestored"),
-                                             ToolTipIcon.Info);
-                }
-                catch (Exception ex)
-                {
-                    _trayIcon.ShowBalloonTip(10000,
-                                             GetString("TipTitle_CouldntRestoreWindows"),
-                                             string.Format(GetString("TipText_WindowsNotAutomaticallyRestored"),
-                                                 ex.Message,
-                                                 ex.GetType()),
-                                             ToolTipIcon.Error);
-                }
-            }
-        }
-
-        void Application_ApplicationExit(object sender, EventArgs e)
-        {
-            SystemEvents.DisplaySettingsChanging -= SystemEvents_DisplaySettingsChanging;
-            _trayIcon.Visible = false;
+            ShowWindyIsRunningTip();
         }
 
         private void Initialize()
         {
+            WindySerializationHelpers.CleanUpStaleState();
+
             // set up the hotkey handlers first, so we can fail fast if they're already taken.
             try
             {
@@ -119,7 +95,7 @@ namespace Windy
 
             _trayIcon = new NotifyIcon();
             _trayIcon.Text = "Windy";
-            _trayIcon.Icon = Properties.Resources.windy;
+            _trayIcon.Icon = Resources.windy;
 
             _trayIcon.ContextMenuStrip = new ContextMenuStrip();
             _trayIcon.ContextMenuStrip.Items.AddRange(
@@ -130,10 +106,38 @@ namespace Windy
                     new ToolStripMenuItem(GetString("MenuItem_RestoreWindowLayout"), null, (sender, args) => RestoreHotkeyOnHotkeyPressed(null, null))
                     { ShortcutKeyDisplayString = "Ctrl+Win+R" },
                     new ToolStripSeparator(),
+                    _savedWindows,
+                    new ToolStripSeparator(), 
                     new ToolStripMenuItem(GetString("MenuItem_AboutWindy"), null, (sender, args) => (new AboutForm()).Show()),
                     new ToolStripMenuItem(GetString("MenuItem_Exit"), null, (sender, args) => Application.Exit()),
                 });
+            PopulateSavedWindows();
         }
+
+        private void ShowWindyIsRunningTip()
+        {
+            _trayIcon.ShowBalloonTip(10000,
+                         GetString("TipTitle_WindyIsRunning"),
+                         GetString("TipText_WindyInstructions"),
+                         ToolTipIcon.Info);
+        }
+
+        private void SystemEvents_DisplaySettingsChanging(object sender, EventArgs e)
+        {
+            var ds = WindySerializationHelpers.LoadDesktopState();
+
+            if (CurrentDesktopLayoutMatches(ds))
+            {
+                RestoreWindows();
+            }
+        }
+
+        private void Application_ApplicationExit(object sender, EventArgs e)
+        {
+            SystemEvents.DisplaySettingsChanging -= SystemEvents_DisplaySettingsChanging;
+            _trayIcon.Visible = false;
+        }
+
 
         private void SaveHotkeyOnHotkeyPressed(object sender, EventArgs eventArgs)
         {
@@ -141,6 +145,7 @@ namespace Windy
             {
                 WindySerializationHelpers.SaveDesktopState();
                 WindySerializationHelpers.SaveWindows();
+                PopulateSavedWindows();
                 _trayIcon.ShowBalloonTip(5000, GetString("TipTitle_WindowLayoutSaved"), GetString("TipText_WindowLayoutSaved"), ToolTipIcon.Info);
             }
             catch (Exception ex)
@@ -155,12 +160,13 @@ namespace Windy
         private void RestoreHotkeyOnHotkeyPressed(object sender, EventArgs eventArgs)
         {
             var loaded = WindySerializationHelpers.LoadDesktopState();
+
             if (!CurrentDesktopLayoutMatches(loaded))
             {
                 var res =
                     MessageBox.Show(
-                        GetString("MessageBoxTitle_RestoringToNonMatchingScreenLayout"),
                         GetString("MessageBoxText_RestoringToNonMatchingScreenLayout"),
+                        GetString("MessageBoxTitle_RestoringToNonMatchingScreenLayout"),
                         MessageBoxButtons.YesNo,
                         MessageBoxIcon.Warning);
 
@@ -170,17 +176,70 @@ namespace Windy
                 }
             }
 
+            RestoreWindows();
+        }
+
+        private void RestoreWindows()
+        {
             try
             {
-                WindySerializationHelpers.RestoreWindows();
-                _trayIcon.ShowBalloonTip(5000, GetString("TipTitle_WindowLayoutRestored"), GetString("TipText_WindowLayoutRestored"), ToolTipIcon.Info);
+                if (WindySerializationHelpers.RestoreWindows())
+                {
+                    _trayIcon.ShowBalloonTip(5000,
+                                             GetString("TipTitle_WindowsAutomaticallyRestored"),
+                                             GetString("TipText_WindowsAutomaticallyRestored"),
+                                             ToolTipIcon.Info);
+                }
+                else
+                {
+                    _trayIcon.ShowBalloonTip(5000,
+                                             GetString("TipTitle_NoWindowsToRestore"),
+                                             GetString("TipText_NoWindowsToRestore"),
+                                             ToolTipIcon.Info);
+                }
             }
             catch (Exception ex)
             {
                 _trayIcon.ShowBalloonTip(10000,
                                          GetString("TipTitle_CouldntRestoreWindows"),
-                                         string.Format(GetString("TipText_CouldntRestoreWindows"), ex.Message, ex.GetType()),
+                                         string.Format(GetString("TipText_WindowsNotAutomaticallyRestored"),
+                                                       ex.Message,
+                                                       ex.GetType()),
                                          ToolTipIcon.Error);
+            }
+        }
+
+        private void PopulateSavedWindows()
+        {
+            _savedWindows.DropDownItems.Clear();
+
+            IEnumerable<Window> windows;
+            if (WindySerializationHelpers.RestoreWindows(out windows))
+            {
+                _savedWindows.DropDownItems.AddRange(
+                    windows.Select(
+                        win =>
+                        new ToolStripMenuItem(string.Format("{0} ({1}\xd7{2} @ {3},{4} - {5})", win.Title, win.Size.Width,
+                                                            win.Size.Height, win.Location.X, win.Location.Y, win.State), null,
+                                                            (sender, args) =>
+                                                                {
+                                                                    try
+                                                                    {
+                                                                        WindyPInvokeWrappers.FocusWindow(win);
+                                                                    }
+                                                                    catch (Exception)
+                                                                    {
+                                                                        _trayIcon.ShowBalloonTip(10000,
+                                                                            GetString("TipTitle_CouldntShowWindow"),
+                                                                            GetString("TipText_CouldntShowWindow"),
+                                                                            ToolTipIcon.Error);
+                                                                    }
+                                                                })
+                        { Enabled = true }).ToArray());
+            }
+            else
+            {
+                _savedWindows.DropDownItems.Add(new ToolStripMenuItem("(no saved windows") { Enabled = false });
             }
         }
 
@@ -189,8 +248,9 @@ namespace Windy
             // the Screen class doesn't seem to invalidate its own internal display state array correctly, so let's just
             // invalidate it using reflection whenever we need to ask about the current display configuration. yes, this
             // is terrible, but the alternative is reimplementing what the Screen class does myself, which would require
-            // grinding out a bunch of P/Invoke wrappers), I'll do the terrible thing instead.  we'll at least be a tiny
-            // bit reasonable and hedge against the possibility of that implementation detail changing in the future.
+            // grinding out a bunch of P/Invoke wrappers, so I'll gladly do the terrible thing instead. I'll at least be
+            // a tiny bit reasonable and hedge against the possibility of that implementation detail changing in the
+            // future.
             var screenScreens = typeof(Screen).GetField("screens", BindingFlags.Static | BindingFlags.NonPublic);
             if (screenScreens != null)
             {

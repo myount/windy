@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -56,7 +57,7 @@ namespace Windy
 
             if (!files.Any())
             {
-                throw new InvalidOperationException("No serialized desktop state data was found.");
+                throw new InvalidOperationException("No saved display configuration data was found.");
             }
 
             string file = files.First();
@@ -81,27 +82,57 @@ namespace Windy
             Utilities.WriteFile(Utilities.GenerateTempFileName("WindowState"), JsonConvert.SerializeObject(GetAllWindows()));
         }
 
-        public static void RestoreWindows()
+        public static bool RestoreWindows()
         {
             var files = Directory.EnumerateFiles(Path.GetTempPath(), "Windy_WindowState_*.json");
 
             if (!files.Any())
             {
-                throw new InvalidOperationException("No serialized window data was found.");
+                throw new InvalidOperationException("No saved window layout was found.");
             }
-            
+
             string file = files.First();
 
             using (var sr = new StreamReader(File.Open(file, FileMode.Open, FileAccess.Read, FileShare.None)))
             {
-                // because Window just wraps SystemWindow (because certain properties of SystemWindow cause
-                // infinite loops when JSON.NET tries to serialize them (and I didn't want to make a custom
-                // build of ManagedWinapi solely to add [JsonIgnore] attributes, or try to inject them with
-                // reflection (is that even possible?))), and because the [JsonConstructor] constructor for
-                // Window initializes its private SystemWindow instance using the serialized HWnd value and
-                // then sets properties on it, simply deserializing the list of Window objects will restore
-                // the window layout, so we don't actually need to assign the result of this.
-                JsonConvert.DeserializeObject<IEnumerable<Window>>(sr.ReadToEnd());
+                var wins = JsonConvert.DeserializeObject<IEnumerable<Window>>(sr.ReadToEnd());
+                if (wins.All(win => !win.IsValid))
+                {
+                    DeleteStaleWindowState();
+                    return false;
+                }
+
+                foreach (var win in wins.Where(win => win.IsValid))
+                {
+                    win.Restore();
+                }
+                return true;
+            }
+        }
+
+        public static bool RestoreWindows(out IEnumerable<Window> windows)
+        {
+            var files = Directory.EnumerateFiles(Path.GetTempPath(), "Windy_WindowState_*.json");
+
+            if (!files.Any())
+            {
+                throw new InvalidOperationException("No saved window layout was found.");
+            }
+
+            string file = files.First();
+
+            using (var sr = new StreamReader(File.Open(file, FileMode.Open, FileAccess.Read, FileShare.None)))
+            {
+                var wins = JsonConvert.DeserializeObject<IEnumerable<Window>>(sr.ReadToEnd());
+                if (wins.All(win => !win.IsValid))
+                {
+                    DeleteStaleWindowState();
+                    windows = null;
+                    return false;
+                }
+
+                windows = wins;
+                return true;
             }
         }
 
@@ -110,6 +141,18 @@ namespace Windy
             foreach (var f in Directory.EnumerateFiles(Path.GetTempPath(), "Windy_WindowState_*.json"))
             {
                 File.Delete(f);
+            }
+        }
+
+        public static void CleanUpStaleState()
+        {
+            var bootTime = DateTime.Now - TimeSpan.FromSeconds((double)Stopwatch.GetTimestamp() / Stopwatch.Frequency);
+            foreach (var file in Directory.EnumerateFiles(Path.GetTempPath(), "Windy_*.json")
+                                          .Select(file => new { file, fileInfo = new FileInfo(file) })
+                                          .Where(f => f.fileInfo.CreationTime < bootTime)
+                                          .Select(f => f.file))
+            {
+                File.Delete(file);
             }
         }
     }

@@ -79,6 +79,15 @@ namespace Windy.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Currently saved windows.
+        /// </summary>
+        internal static string MenuItem_CurrentlySavedWindows {
+            get {
+                return ResourceManager.GetString("MenuItem_CurrentlySavedWindows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to E&amp;xit.
         /// </summary>
         internal static string MenuItem_Exit {
@@ -160,6 +169,33 @@ namespace Windy.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Windy couldn&apos;t show the window &quot;{0}&quot;. It may not exist anymore..
+        /// </summary>
+        internal static string TipText_CouldntShowWindow {
+            get {
+                return ResourceManager.GetString("TipText_CouldntShowWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Windy tried to restore your window layout, but none of the windows open now were open when you saved the layout..
+        /// </summary>
+        internal static string TipText_NoWindowsToRestore {
+            get {
+                return ResourceManager.GetString("TipText_NoWindowsToRestore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The saved window layout has been restored..
+        /// </summary>
+        internal static string TipText_WindowLayoutRestored {
+            get {
+                return ResourceManager.GetString("TipText_WindowLayoutRestored", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your current window layout has been saved..
         /// </summary>
         internal static string TipText_WindowLayoutSaved {
@@ -210,6 +246,33 @@ namespace Windy.Properties {
         internal static string TipTitle_CouldntSaveWindows {
             get {
                 return ResourceManager.GetString("TipTitle_CouldntSaveWindows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Couldn&apos;t show window.
+        /// </summary>
+        internal static string TipTitle_CouldntShowWindow {
+            get {
+                return ResourceManager.GetString("TipTitle_CouldntShowWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No windows restored.
+        /// </summary>
+        internal static string TipTitle_NoWindowsToRestore {
+            get {
+                return ResourceManager.GetString("TipTitle_NoWindowsToRestore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Window layout restored.
+        /// </summary>
+        internal static string TipTitle_WindowLayoutRestored {
+            get {
+                return ResourceManager.GetString("TipTitle_WindowLayoutRestored", resourceCulture);
             }
         }
         
