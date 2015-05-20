@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.1.0.0 - 2013-05-19
+## v1.1.0.0 - 2015-05-19
 ### Added
 * Added a list of currently saved window titles to the notification area icon menu.  Clicking one will cause Windy to
 attempt to bring the corresponding window to the front (*not* restore its saved position).
