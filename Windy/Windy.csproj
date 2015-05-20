@@ -75,6 +75,7 @@
     </Compile>
     <Compile Include="Utilities.cs" />
     <Compile Include="Window.cs" />
+    <Compile Include="WindyPInvokeWrappers.cs" />
     <Compile Include="WindySerializationHelpers.cs" />
     <Compile Include="WindyApplicationContext.cs" />
     <EmbeddedResource Include="AboutForm.resx">

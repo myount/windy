@@ -19,12 +19,14 @@
 */
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
 using ManagedWinapi;
-
+using ManagedWinapi.Windows;
 using Microsoft.Win32;
 
 using Windy.Properties;
@@ -38,6 +40,8 @@ namespace Windy
         private readonly Hotkey _saveHotkey = new Hotkey();
 
         private readonly Hotkey _restoreHotkey = new Hotkey();
+
+        private ToolStripMenuItem _savedWindows = new ToolStripMenuItem(GetString("MenuItem_CurrentlySavedWindows"));
 
         public WindyApplicationContext()
         {
@@ -56,7 +60,7 @@ namespace Windy
                         ShowWindyIsRunningTip();
                     }
                 };
-
+            
             WindySerializationHelpers.SaveDesktopState();
             ShowWindyIsRunningTip();
         }
@@ -102,9 +106,12 @@ namespace Windy
                     new ToolStripMenuItem(GetString("MenuItem_RestoreWindowLayout"), null, (sender, args) => RestoreHotkeyOnHotkeyPressed(null, null))
                     { ShortcutKeyDisplayString = "Ctrl+Win+R" },
                     new ToolStripSeparator(),
+                    _savedWindows,
+                    new ToolStripSeparator(), 
                     new ToolStripMenuItem(GetString("MenuItem_AboutWindy"), null, (sender, args) => (new AboutForm()).Show()),
                     new ToolStripMenuItem(GetString("MenuItem_Exit"), null, (sender, args) => Application.Exit()),
                 });
+            PopulateSavedWindows();
         }
 
         private void ShowWindyIsRunningTip()
@@ -138,6 +145,7 @@ namespace Windy
             {
                 WindySerializationHelpers.SaveDesktopState();
                 WindySerializationHelpers.SaveWindows();
+                PopulateSavedWindows();
                 _trayIcon.ShowBalloonTip(5000, GetString("TipTitle_WindowLayoutSaved"), GetString("TipText_WindowLayoutSaved"), ToolTipIcon.Info);
             }
             catch (Exception ex)
@@ -198,6 +206,40 @@ namespace Windy
                                                        ex.Message,
                                                        ex.GetType()),
                                          ToolTipIcon.Error);
+            }
+        }
+
+        private void PopulateSavedWindows()
+        {
+            _savedWindows.DropDownItems.Clear();
+
+            IEnumerable<Window> windows;
+            if (WindySerializationHelpers.RestoreWindows(out windows))
+            {
+                _savedWindows.DropDownItems.AddRange(
+                    windows.Select(
+                        win =>
+                        new ToolStripMenuItem(string.Format("{0} ({1}\xd7{2} @ {3},{4} - {5})", win.Title, win.Size.Width,
+                                                            win.Size.Height, win.Location.X, win.Location.Y, win.State), null,
+                                                            (sender, args) =>
+                                                                {
+                                                                    try
+                                                                    {
+                                                                        WindyPInvokeWrappers.FocusWindow(win);
+                                                                    }
+                                                                    catch (Exception)
+                                                                    {
+                                                                        _trayIcon.ShowBalloonTip(10000,
+                                                                            GetString("TipTitle_CouldntShowWindow"),
+                                                                            GetString("TipText_CouldntShowWindow"),
+                                                                            ToolTipIcon.Error);
+                                                                    }
+                                                                })
+                        { Enabled = true }).ToArray());
+            }
+            else
+            {
+                _savedWindows.DropDownItems.Add(new ToolStripMenuItem("(no saved windows") { Enabled = false });
             }
         }
 

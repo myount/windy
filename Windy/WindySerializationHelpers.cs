@@ -110,6 +110,32 @@ namespace Windy
             }
         }
 
+        public static bool RestoreWindows(out IEnumerable<Window> windows)
+        {
+            var files = Directory.EnumerateFiles(Path.GetTempPath(), "Windy_WindowState_*.json");
+
+            if (!files.Any())
+            {
+                throw new InvalidOperationException("No saved window layout was found.");
+            }
+
+            string file = files.First();
+
+            using (var sr = new StreamReader(File.Open(file, FileMode.Open, FileAccess.Read, FileShare.None)))
+            {
+                var wins = JsonConvert.DeserializeObject<IEnumerable<Window>>(sr.ReadToEnd());
+                if (wins.All(win => !win.IsValid))
+                {
+                    DeleteStaleWindowState();
+                    windows = null;
+                    return false;
+                }
+
+                windows = wins;
+                return true;
+            }
+        }
+
         private static void DeleteStaleWindowState()
         {
             foreach (var f in Directory.EnumerateFiles(Path.GetTempPath(), "Windy_WindowState_*.json"))

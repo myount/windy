@@ -124,6 +124,9 @@
     <value>&amp;Über Windy...</value>
     <comment>Menu item; &amp; should precede shortcut key</comment>
   </data>
+  <data name="MenuItem_CurrentlySavedWindows" xml:space="preserve">
+    <value>Derzeitig gespeicherten Fenster</value>
+  </data>
   <data name="MenuItem_Exit" xml:space="preserve">
     <value>&amp;Ende</value>
     <comment>Menu item; &amp; should precede shortcut key</comment>
@@ -156,6 +159,9 @@
     <value>Ein Fehler ist dabei aufgetreten, wenn wir die Fensterbelegung zu speichern versuchten: {0} ({1})</value>
     <comment>{0} and {1} are the exception message and type</comment>
   </data>
+  <data name="TipText_CouldntShowWindow" xml:space="preserve">
+    <value>Windy könnte das Fenster &#x1E;&#x1E;„{0}” nicht zeigen. Vielleicht existiert es nicht mehr.</value>
+  </data>
   <data name="TipText_NoWindowsToRestore" xml:space="preserve">
     <value>Windy hat versucht, Ihre Fensterbelegung wiederherzustellen, aber keiner der derzeit offenen Fenster passen die gespeicherten Fenster zusammen.</value>
   </data>
@@ -180,6 +186,9 @@
   </data>
   <data name="TipTitle_CouldntSaveWindows" xml:space="preserve">
     <value>Windy könnte Ihre Fensterbelegung nicht speichern</value>
+  </data>
+  <data name="TipTitle_CouldntShowWindow" xml:space="preserve">
+    <value>Fenster könnte nicht gezeigt werden</value>
   </data>
   <data name="TipTitle_NoWindowsToRestore" xml:space="preserve">
     <value>Keine Fenster wiederhergestellt</value>

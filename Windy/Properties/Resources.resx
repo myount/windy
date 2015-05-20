@@ -124,6 +124,9 @@
     <value>&amp;About Windy...</value>
     <comment>Menu item; &amp; should precede shortcut key</comment>
   </data>
+  <data name="MenuItem_CurrentlySavedWindows" xml:space="preserve">
+    <value>Currently saved windows</value>
+  </data>
   <data name="MenuItem_Exit" xml:space="preserve">
     <value>E&amp;xit</value>
     <comment>Menu item; &amp; should precede shortcut key</comment>
@@ -156,6 +159,9 @@
     <value>An error occurred while trying to save your window layout: {0} ({1})</value>
     <comment>{0} and {1} are the exception message and type</comment>
   </data>
+  <data name="TipText_CouldntShowWindow" xml:space="preserve">
+    <value>Windy couldn't show the window "{0}". It may not exist anymore.</value>
+  </data>
   <data name="TipText_NoWindowsToRestore" xml:space="preserve">
     <value>Windy tried to restore your window layout, but none of the windows open now were open when you saved the layout.</value>
   </data>
@@ -180,6 +186,9 @@
   </data>
   <data name="TipTitle_CouldntSaveWindows" xml:space="preserve">
     <value>Windy couldn't save your windows</value>
+  </data>
+  <data name="TipTitle_CouldntShowWindow" xml:space="preserve">
+    <value>Couldn't show window</value>
   </data>
   <data name="TipTitle_NoWindowsToRestore" xml:space="preserve">
     <value>No windows restored</value>

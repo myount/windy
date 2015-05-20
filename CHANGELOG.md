@@ -1,10 +1,14 @@
 # Changelog
 
-## v1.0.0.3 - not yet released
+## Unreleased
+### Added
+* Added a list of currently saved window titles to the notification area icon menu.  Clicking one will cause Windy to
+attempt to bring the corresponding window to the front (*not* restore its saved position).
+
 ### Fixed
 * The "Windy is running" balloon tip will now only be displayed when Windy starts and when you *left*-click on the
 tray icon.
-* Desktop and window state information created before the last system boot is deleted when Windy starts.  (This is
+* Desktop and window state information created before the current system boot is deleted when Windy starts.  (This is
 a more discriminating version of the thing I thought I had done in 1.0.0.2.)
 
 ### Changed
