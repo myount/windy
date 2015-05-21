@@ -116,7 +116,8 @@ namespace Windy
 
             if (!files.Any())
             {
-                throw new InvalidOperationException("No saved window layout was found.");
+                windows = null;
+                return false;
             }
 
             string file = files.First();
