@@ -151,6 +151,9 @@
   <data name="MessageBoxTitle_RestoringToNonMatchingScreenLayout" xml:space="preserve">
     <value>Really restore window layout?</value>
   </data>
+  <data name="NoSavedWindows" xml:space="preserve">
+    <value>(no saved windows)</value>
+  </data>
   <data name="TipText_CouldntRestoreWindows" xml:space="preserve">
     <value>An error occurred while trying to restore your window layout: {0} ({1})</value>
     <comment>{0} and {1} are the exception message and type</comment>

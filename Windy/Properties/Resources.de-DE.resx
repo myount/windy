@@ -151,6 +151,9 @@
   <data name="MessageBoxTitle_RestoringToNonMatchingScreenLayout" xml:space="preserve">
     <value>Fensterbelegung eigentlich rückstellen?</value>
   </data>
+  <data name="NoSavedWindows" xml:space="preserve">
+    <value>(keine gespeicherten Fenster)</value>
+  </data>
   <data name="TipText_CouldntRestoreWindows" xml:space="preserve">
     <value>Ein Fehler ist dabei aufgetreten, wenn wir die Fensterbelegung wiederherzustellen versuchten: {0} ({1})</value>
     <comment>{0} and {1} are the exception message and type</comment>

@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.0.1 - 2015-05-20
+### Fixed
+* Fixed a bug where Windy would crash on startup if there was no saved window state.
+
 ## v1.1.0.0 - 2015-05-19
 ### Added
 * Added a list of currently saved window titles to the notification area icon menu.  Clicking one will cause Windy to

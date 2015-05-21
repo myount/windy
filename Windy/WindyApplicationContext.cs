@@ -239,7 +239,7 @@ namespace Windy
             }
             else
             {
-                _savedWindows.DropDownItems.Add(new ToolStripMenuItem("(no saved windows") { Enabled = false });
+                _savedWindows.DropDownItems.Add(new ToolStripMenuItem(GetString("NoSavedWindows")) { Enabled = false });
             }
         }
 
