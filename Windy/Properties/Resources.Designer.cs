@@ -151,6 +151,15 @@ namespace Windy.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (no saved windows).
+        /// </summary>
+        internal static string NoSavedWindows {
+            get {
+                return ResourceManager.GetString("NoSavedWindows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error occurred while trying to restore your window layout: {0} ({1}).
         /// </summary>
         internal static string TipText_CouldntRestoreWindows {
