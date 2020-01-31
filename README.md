@@ -1,4 +1,6 @@
 # Windy
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmyount%2Fwindy.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmyount%2Fwindy?ref=badge_shield)
+
 
 ## Please note: Windy is no longer actively maintained.
 
@@ -31,3 +33,7 @@ For maximum utility, place a shortcut to Windy.exe in your Startup folder.
 
 Fork it, make your changes, send a pull request.  Please try to observe the existing coding style, which is
 mostly the default that Visual Studio imposes anyway.
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmyount%2Fwindy.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmyount%2Fwindy?ref=badge_large)
